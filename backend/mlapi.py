@@ -7,11 +7,7 @@ import numpy as np
 
 app = FastAPI(debug=True)
 
-@app.get('/')
-def home():
-    return {'text': 'hello'}
-
-@app.get('/predict')
+@app.get('/check')
 def predict(url:str):
     model = pickle.load(open("model.dat", "rb"))
     data = generate_data_set(url)
