@@ -1,0 +1,32 @@
+{
+    "name": "Phishing Detection",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action":{
+        "default_icon": {
+            "16": "assets/phishing.png",
+            "48": "assets/phishing.png",
+            "128": "assets/phishing.png"
+        },
+        "default_title": "Phishing Detection"
+    },
+    "icons": {
+        "16": "assets/phishing.png",
+        "48": "assets/phishing.png",
+        "128": "assets/phishing.png"
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content-scripts/main.js"]
+        }
+    ],
+    "permissions": [
+        "tabs"
+    ]
+
+}
