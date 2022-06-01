@@ -11,12 +11,20 @@ import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 export default defineConfig({
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src")
+      "@": resolve(__dirname, "frontend")
     }
   },
   build: {
     rollupOptions: {
-      input: "src/manifest.json"
+      input: "manifest.json",
+      output: {
+        manualChunks: {
+          'group': [
+            './src/views/Home.vue',
+            './src/views/HelloWorld.vue'
+          ],
+        },
+    },
     }
   },
   plugins: [
