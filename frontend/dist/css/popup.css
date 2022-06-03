@@ -1,0 +1,32 @@
+body {
+  width: 240px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background: white;
+  padding: 15px;
+}
+
+.text {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.menu-item img {
+  margin-right: 15px;
+}
+.menu-item a {
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: #e5e5e5;
+}

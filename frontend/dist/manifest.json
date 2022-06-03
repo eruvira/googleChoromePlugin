@@ -1,0 +1,21 @@
+{
+    "name": "Phishing Detection",
+    "version": "1.0.0",
+    "description": "Supa cool",
+    "permissions":[
+        "storage",
+        "webRequest",
+        "declarativeNetRequest"
+    ],
+    "host_permissions": [
+        "http://*/",
+        "https://*/"
+    ],
+    "background":{
+        "service_worker": "js/background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "manifest_version": 3
+}
