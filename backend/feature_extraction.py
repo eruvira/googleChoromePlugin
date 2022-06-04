@@ -44,7 +44,7 @@ def generate_data_set(url):
     except:
         global_rank = -1
 
-    # 1.having_IP_Address
+    #1.having_IP_Address
     try:
         ipaddress.ip_address(url)
         data_set.append(-1)
@@ -106,7 +106,7 @@ def generate_data_set(url):
     except:
         data_set.append(-1)
 
-    # 9.Domain_registeration_length
+    #9.Domain_registeration_length
     expiration_date = whois_response.expiration_date
     registration_length = 0
     try:
@@ -127,16 +127,27 @@ def generate_data_set(url):
         data_set.append(-1)
     else:
         try:
-            for head in soup.find_all('head'):
-                for head.link in soup.find_all('link', href=True):
-                    dots = [x.start(0)
-                            for x in re.finditer('\.', head.link['href'])]
-                    if url in head.link['href'] or len(dots) == 1 or domain in head.link['href']:
-                        data_set.append(1)
-                        raise StopIteration
-                    else:
-                        data_set.append(-1)
-                        raise StopIteration
+            if len(soup.find_all('head')):
+                for head in soup.find_all('head'):
+                    for head.link in soup.find_all('link', href=True):
+                        dots = [x.start(0)
+                                for x in re.finditer('\.', head.link['href'])]
+                        if url in head.link['href'] or len(dots) == 1 or domain in head.link['href']:
+                            data_set.append(1)
+                            raise StopIteration
+                        else:
+                            data_set.append(-1)
+                            raise StopIteration
+            else:
+                for link in soup.find_all('link', href=True):
+                        dots = [x.start(0)
+                                for x in re.finditer('\.', link['href'])]
+                        if url in link['href'] or len(dots) == 1 or domain in link['href']:
+                            data_set.append(1)
+                            raise StopIteration
+                        else:
+                            data_set.append(-1)
+                            raise StopIteration
         except StopIteration:
             pass
 
@@ -210,18 +221,17 @@ def generate_data_set(url):
             if "#" in a['href'] or "javascript" in a['href'].lower() or "mailto" in a['href'].lower() or not (url in a['href'] or domain in a['href']):
                 unsafe = unsafe + 1
             i = i + 1
-
         try:
             percentage = unsafe / float(i) * 100
+            if percentage < 31.0:
+                data_set.append(1)
+            elif ((percentage >= 31.0) and (percentage < 67.0)):
+                data_set.append(0)
+            else:
+                data_set.append(-1)
         except:
             data_set.append(1)
-
-        if percentage < 31.0:
-            data_set.append(1)
-        elif ((percentage >= 31.0) and (percentage < 67.0)):
-            data_set.append(0)
-        else:
-            data_set.append(-1)
+        
 
     # 15. Links_in_tags
     i = 0
