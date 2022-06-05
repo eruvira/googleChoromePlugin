@@ -1,7 +1,5 @@
 import { createApp } from 'vue'
 import * as Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 import {createRouter, createWebHistory} from 'vue-router'
 import Popup from './components/Popup.vue'
 import Home from './views/Home.vue'
@@ -29,6 +27,5 @@ const router = createRouter({
 })
 
 createApp(Popup)
-.use(VueAxios, axios)
 .use(router)
 .mount('#app')

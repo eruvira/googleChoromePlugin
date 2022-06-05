@@ -8,23 +8,61 @@
         *you will be redirected from any website from this list because it may be unsecure
     </div>
     <div class="overflow">
-        <div class="list-item">
-            <div>vk.com</div>
-            <div>img</div>
+        <div class="list-item" v-for="site in banList" :key="site.id">
+            <div>{{ site.url.substring(8) }}</div>
+            <div @click="deleteSite(site.id)">img</div>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios'
-
+import { ref } from 'vue'
 export default {
-    name: 'BanList',
+    setup() {
+        const banList = ref(null)
+        return {
+            banList
+        }
+    },
     beforeMount() {
-        axios.get('https://fastapi-ml-sis1812.herokuapp.com/blocks')
-            .then(function (response) {
-                console.log(response)
-            })
+        this.getBanList();
+    },
+
+    methods: {
+        getBanList() {
+            const config = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            }
+
+            fetch('https://fastapi-ml-sis1812.herokuapp.com/blocks', config)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    this.banList = data;
+                });
+        },
+
+        deleteSite(id) {
+            const delData = {
+                "id": id
+            }
+            const config = {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(delData)
+            }
+
+            fetch('https://fastapi-ml-sis1812.herokuapp.com/delete', config)
+                .then(response => response.json())
+                .catch(err => console.log(err))
+            this.getBanList()
+        }
     },
 
 }
