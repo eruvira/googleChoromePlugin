@@ -9,10 +9,10 @@
     </router-link>
     <a class="menu-item" href="https://t.me/PhishingDetectBot" target="_blank">
         <img src="../images/telegram.svg" />
-        <div class="text" >telegram bot</div>
+        <div class="text">telegram bot</div>
     </a>
-    <router-link class="menu-item"  to="/support">
-        <img src="../images/support.svg" />
+    <router-link class="menu-item" to="/support">
+        <div style="background-image: url('chrome-extension://__MSG_@@extension_id__/js/images/support.svg')" />
         <div class="text">support</div>
     </router-link>
 </template>

@@ -156,3 +156,38 @@ body {
     align-items: center;
     gap: 20px;
 }
+
+#loading {
+    position: relative;
+    margin: auto;
+    width: 100px;
+    height: 50px;
+  }
+  #loading:before , #loading:after{
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #3B63A0;
+    box-shadow: 20px 0 #3B63A0;
+    left: 0;
+    top: 0;
+    animation: ballMoveX 0.8s linear infinite;
+  }
+  #loading:after {
+    box-shadow: none;
+    transform-origin: 40px 0;
+    transform: rotate(-153deg);
+    animation: rotateLoader 0.8s linear infinite;
+  }
+
+  @keyframes rotateLoader {
+    0% , 10%{ transform: rotate(-153deg); }
+    90%, 100% { transform: rotate(0deg); }
+  }
+  @keyframes ballMoveX {
+    0% , 10%{  transform: translateX(0) }
+    90%, 100% { transform: translateX(20px) }
+  }
+      
