@@ -17685,6 +17685,81 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/SafeScan.vue?vue&type=script&lang=js":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/SafeScan.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "Safe",
+  props: {
+    domain: {
+      type: String
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/ScamScan.vue?vue&type=script&lang=js":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/ScamScan.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'Scam',
+  props: {
+    domain: {
+      type: String
+    },
+    originFromPage: {
+      type: String
+    }
+  },
+  data: function data() {
+    return {
+      url: ''
+    };
+  },
+  methods: {
+    getUrl: function getUrl() {
+      this.url = this.originFromPage;
+    },
+    addToBan: function addToBan() {
+      this.getUrl();
+      var site = {
+        "url": this.url
+      };
+      var config = {
+        headers: {
+          'Content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(site)
+      };
+      console.log(site);
+      console.log(config);
+      fetch('https://fastapi-ml-sis1812.herokuapp.com/block', config).then(function (response) {
+        return response.json();
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/views/BanList.vue?vue&type=script&lang=js":
 /*!*****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/views/BanList.vue?vue&type=script&lang=js ***!
@@ -17756,15 +17831,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_SafeScan_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/SafeScan.vue */ "./assets/js/components/SafeScan.vue");
-/* harmony import */ var _components_ScamScan_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/ScamScan.vue */ "./assets/js/components/ScamScan.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _components_SafeScan_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/SafeScan.vue */ "./assets/js/components/SafeScan.vue");
+/* harmony import */ var _components_ScamScan_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/ScamScan.vue */ "./assets/js/components/ScamScan.vue");
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Scan',
   components: {
-    SafeScan: _components_SafeScan_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    ScamScan: _components_ScamScan_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    SafeScan: _components_SafeScan_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    ScamScan: _components_ScamScan_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  setup: function setup() {
+    var isScam = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+    return {
+      isScam: isScam
+    };
+  },
+  data: function data() {
+    return {
+      origin: '',
+      domain: ''
+    };
+  },
+  beforeMount: function beforeMount() {
+    this.scanSite();
+  },
+  methods: {
+    getVars: function getVars(site) {
+      this.origin = new URL(site).origin;
+      this.domain = new URL(site).hostname;
+    },
+    scanSite: function scanSite() {
+      var _this = this;
+
+      chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+      }, function (tabs) {
+        var url = tabs[0].url;
+
+        _this.getVars(url);
+
+        var scanData = {
+          "url": url
+        };
+        var config = {
+          headers: {
+            'Content-type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(scanData)
+        };
+        fetch('https://fastapi-ml-sis1812.herokuapp.com/check', config).then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          if (data.result === '-1') {
+            _this.isScam = true;
+          } else if (data.result === '1') {
+            _this.isScam = false;
+          }
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      });
+    }
   }
 });
 
@@ -17809,23 +17941,26 @@ var _hoisted_1 = {
   "class": "result"
 };
 
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "scan-txt mb-5"
-}, "Page domain is:"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "scan-txt good"
-}, "example.com")], -1
+}, "Page domain is:", -1
 /* HOISTED */
 );
 
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_3 = {
+  "class": "scan-txt good"
+};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "scan-txt"
 }, "this page is safe for browsing", -1
 /* HOISTED */
 );
 
-var _hoisted_4 = [_hoisted_2, _hoisted_3];
-function render(_ctx, _cache) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, _hoisted_4);
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(), 1
+  /* TEXT */
+  )]), _hoisted_4]);
 }
 
 /***/ }),
@@ -17842,11 +17977,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  "class": "result"
+};
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"result\"><div><div class=\"scan-txt mb-5\">Page domain is:</div><div class=\"scan-txt bad\">example.com</div></div><div class=\"scan-txt\">this page <span style=\"font-weight:800;\">is not</span> safe for browsing</div><div class=\"scan-txt\">want to add to <span style=\"font-weight:800;\">ban list?</span></div></div><div style=\"display:flex;justify-content:space-between;margin-top:10px;\"><button class=\"yes-btn btn-txt\">no</button><button class=\"no-btn btn-txt\">yes</button></div>", 2);
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "scan-txt mb-5"
+}, "Page domain is:", -1
+/* HOISTED */
+);
 
-function render(_ctx, _cache) {
-  return _hoisted_1;
+var _hoisted_3 = {
+  "class": "scan-txt bad"
+};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "scan-txt"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("this page "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  style: {
+    "font-weight": "800"
+  }
+}, "is not"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" safe for browsing")], -1
+/* HOISTED */
+);
+
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "scan-txt"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("want to add to "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  style: {
+    "font-weight": "800"
+  }
+}, "ban list?")], -1
+/* HOISTED */
+);
+
+var _hoisted_6 = {
+  style: {
+    "display": "flex",
+    "justify-content": "space-between",
+    "margin-top": "10px"
+  }
+};
+
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "yes-btn btn-txt"
+}, "no", -1
+/* HOISTED */
+);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.domain) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.originFromPage), 1
+  /* TEXT */
+  )]), _hoisted_4, _hoisted_5]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "no-btn btn-txt",
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.addToBan && $options.addToBan.apply($options, arguments);
+    })
+  }, "yes")])], 64
+  /* STABLE_FRAGMENT */
+  );
 }
 
 /***/ }),
@@ -18043,7 +18232,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_scam_scan = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("scam-scan");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_safe_scan), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_scam_scan)]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [!$setup.isScam ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_safe_scan, {
+    key: 0,
+    domain: $data.domain
+  }, null, 8
+  /* PROPS */
+  , ["domain"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.isScam ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_scam_scan, {
+    key: 1,
+    domain: $data.domain,
+    originFromPage: $data.origin
+  }, null, 8
+  /* PROPS */
+  , ["domain", "originFromPage"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -18186,12 +18386,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _SafeScan_vue_vue_type_template_id_6e47046a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SafeScan.vue?vue&type=template&id=6e47046a */ "./assets/js/components/SafeScan.vue?vue&type=template&id=6e47046a");
-/* harmony import */ var C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _SafeScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SafeScan.vue?vue&type=script&lang=js */ "./assets/js/components/SafeScan.vue?vue&type=script&lang=js");
+/* harmony import */ var C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
-const script = {}
+
+
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_SafeScan_vue_vue_type_template_id_6e47046a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"assets/js/components/SafeScan.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SafeScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SafeScan_vue_vue_type_template_id_6e47046a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"assets/js/components/SafeScan.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -18211,12 +18413,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _ScamScan_vue_vue_type_template_id_614bb48c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ScamScan.vue?vue&type=template&id=614bb48c */ "./assets/js/components/ScamScan.vue?vue&type=template&id=614bb48c");
-/* harmony import */ var C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _ScamScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ScamScan.vue?vue&type=script&lang=js */ "./assets/js/components/ScamScan.vue?vue&type=script&lang=js");
+/* harmony import */ var C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
-const script = {}
+
+
 
 ;
-const __exports__ = /*#__PURE__*/(0,C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_ScamScan_vue_vue_type_template_id_614bb48c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"assets/js/components/ScamScan.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_daris_OneDrive_plugin_frontend_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_ScamScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_ScamScan_vue_vue_type_template_id_614bb48c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"assets/js/components/ScamScan.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -18340,6 +18544,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Popup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Popup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Popup.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/Popup.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./assets/js/components/SafeScan.vue?vue&type=script&lang=js":
+/*!*******************************************************************!*\
+  !*** ./assets/js/components/SafeScan.vue?vue&type=script&lang=js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SafeScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SafeScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./SafeScan.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/SafeScan.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./assets/js/components/ScamScan.vue?vue&type=script&lang=js":
+/*!*******************************************************************!*\
+  !*** ./assets/js/components/ScamScan.vue?vue&type=script&lang=js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScamScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ScamScan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ScamScan.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./assets/js/components/ScamScan.vue?vue&type=script&lang=js");
  
 
 /***/ }),
