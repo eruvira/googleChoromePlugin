@@ -1,7 +1,7 @@
 {
     "name": "Phishing Detection",
     "version": "1.0.0",
-    "description": "Supa cool",
+    "description": "a URL based phishing attack detector for all websites",
     "permissions":[
         "storage",
         "webRequest",
@@ -11,6 +11,11 @@
         "http://*/",
         "https://*/"
     ],
+    "icons":{
+        "16": "icons/phishing.png",
+        "48": "icons/phishing.png",
+        "128": "icons/phishing.png"
+    },
     "background":{
         "scripts": ["js/background.js"]
     },

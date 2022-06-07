@@ -1,13 +1,15 @@
 <template>
     <div class="wrapper">
-        <router-view></router-view>
+         <div v-if="isError" class="scan-txt mb-5">Something went wrong</div>
+        <router-view v-if="!isError"></router-view>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            banList: []
+            banList: [],
+            isError: false
         }
     },
 
@@ -39,6 +41,10 @@ export default {
                     chrome.storage.sync.set({
                         toggleSitesList: this.banList
                     }, () => { })
+                })
+                .catch((error) => {
+                    this.isError = true
+                    console.log(error)
                 })
         },
     }
