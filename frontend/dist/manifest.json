@@ -5,9 +5,7 @@
     "permissions":[
         "storage",
         "webRequest",
-        "declarativeNetRequest",
         "webRequestBlocking",
-        "tabs",
         "http://*/",
         "https://*/"
     ],

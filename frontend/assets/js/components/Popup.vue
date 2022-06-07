@@ -1,15 +1,13 @@
 <template>
     <div class="wrapper">
-         <div v-if="isError" class="scan-txt mb-5">Something went wrong</div>
-        <router-view v-if="!isError"></router-view>
+        <router-view></router-view>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            banList: [],
-            isError: false
+            banList: []
         }
     },
 
