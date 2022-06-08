@@ -9,7 +9,7 @@
     </div>
     <div v-if="isError" class="scan-txt mb-5">Something went wrong</div>
     <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-        <button class="yes-btn btn-txt">no</button>
+        <router-link class="yes-btn btn-txt" to="/">no</router-link>
         <button class="no-btn btn-txt" @click="addToBan">yes</button>
     </div>
      <div v-if="isSuccess" class="scan-txt mb-5">You added this site to ban</div>
